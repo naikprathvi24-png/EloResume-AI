@@ -10,7 +10,7 @@ from flask_mail import Mail, Message
 from docx import Document
 from docx.shared import Pt
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-import fitz
+import pymupdf
 import os
 from uuid import uuid4
 from werkzeug.utils import secure_filename
