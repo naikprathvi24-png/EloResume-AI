@@ -139,14 +139,18 @@ def generate_ai_text(prompt):
 # Secret key for login sessions
 app.secret_key = "eloresume-secret-key-change-this-later"
 
-DATABASE = "database/eloresume.db"
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+DATABASE_DIR = os.path.join(BASE_DIR, "database")
+os.makedirs(DATABASE_DIR, exist_ok=True)
+
+DATABASE = os.path.join(DATABASE_DIR, "eloresume.db")
 
 # -----------------------------
 # DATABASE CONNECTION
 # -----------------------------
-
 def get_db():
-    connection = sqlite3.connect("database/eloresume.db")
+    connection = sqlite3.connect(DATABASE)
     connection.row_factory = sqlite3.Row
     return connection
 
@@ -156,7 +160,7 @@ def get_db():
 
 def init_db():
 
-    connection = sqlite3.connect("database/eloresume.db")
+    connection = sqlite3.connect(DATABASE)
     connection.row_factory = sqlite3.Row
 
     # OTP verification table
@@ -2311,10 +2315,11 @@ def logout():
 # -----------------------------
 # START APPLICATION
 # -----------------------------
+# Initialize database when the app starts
+init_db()
+
+# Local development
 if __name__ == "__main__":
-
-    init_db()
-
     app.run(
         host="0.0.0.0",
         port=5000,
