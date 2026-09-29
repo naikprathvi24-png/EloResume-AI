@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Create Resume - EloResume</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <nav class="navbar">
+
+        <div class="logo">
+            EloResume
+        </div>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="back-link">
+            ← Dashboard
+        </a>
+
+    </nav>
+
+
+    <main class="create-page">
+
+        <div class="create-header">
+
+            <h1>Create Your Resume</h1>
+
+            <p>
+                Let's create your professional resume.
+            </p>
+
+        </div>
+
+
+        <form method="POST"
+              action="{{ url_for('create_resume') }}">
+
+            <!-- Resume Name -->
+
+            <section class="create-card">
+
+                <h2>1. Resume Name</h2>
+
+                <p>
+                    Give your resume a name so you can find it later.
+                </p>
+
+                <input
+                    type="text"
+                    name="resume_name"
+                    placeholder="Example: Python Developer Resume"
+                    required
+                >
+
+            </section>
+
+
+            <!-- Resume Type -->
+
+            <section class="create-card">
+
+                <h2>2. Choose Resume Type</h2>
+
+                <div class="choice-grid">
+
+                    <label class="choice-card">
+
+                        <input
+                            type="radio"
+                            name="resume_type"
+                            value="Fresher"
+                            required
+                        >
+
+                        <div class="choice-content">
+
+                            <div class="choice-icon">
+                                🎓
+                            </div>
+
+                            <h3>Fresher</h3>
+
+                            <p>
+                                For students and recent graduates.
+                            </p>
+
+                        </div>
+
+                    </label>
+
+
+                    <label class="choice-card">
+
+                        <input
+                            type="radio"
+                            name="resume_type"
+                            value="Experienced"
+                        >
+
+                        <div class="choice-content">
+
+                            <div class="choice-icon">
+                                💼
+                            </div>
+
+                            <h3>Experienced</h3>
+
+                            <p>
+                                For professionals with work experience.
+                            </p>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            <!-- Resume Style -->
+
+            <section class="create-card">
+
+                <h2>3. Choose Resume Style</h2>
+
+                <div class="choice-grid">
+
+                    <label class="choice-card">
+
+                        <input
+                            type="radio"
+                            name="style"
+                            value="Simple"
+                            required
+                        >
+
+                        <div class="choice-content">
+
+                            <div class="choice-icon">
+                                📄
+                            </div>
+
+                            <h3>Simple</h3>
+
+                            <p>
+                                Clean, professional and ATS-friendly.
+                            </p>
+
+                        </div>
+
+                    </label>
+
+
+                    <label class="choice-card">
+
+                        <input
+                            type="radio"
+                            name="style"
+                            value="Colorful"
+                        >
+
+                        <div class="choice-content">
+
+                            <div class="choice-icon">
+                                🎨
+                            </div>
+
+                            <h3>Colorful</h3>
+
+                            <p>
+                                Modern, creative and visually attractive.
+                            </p>
+
+                        </div>
+
+                    </label>
+
+                </div>
+
+            </section>
+
+
+            <button
+                type="submit"
+                class="create-button">
+
+                Continue →
+
+            </button>
+
+        </form>
+
+    </main>
+
+</body>
+
+</html>

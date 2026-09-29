@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>{{ resume["resume_name"] }} - Preview</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body class="preview-body">
+
+   
+
+
+   <main class="resume-paper {{ resume['style']|lower }}">
+
+        <!-- HEADER -->
+
+        <header class="resume-header">
+
+            <h1>
+                {{ resume_data.get("full_name", "Your Name") }}
+            </h1>
+
+            {% if resume_data.get("professional_title") %}
+
+                <h2>
+                    {{ resume_data.get("professional_title") }}
+                </h2>
+
+            {% endif %}
+
+
+            <div class="contact-line">
+
+                {% if resume_data.get("email") %}
+                    <span>
+                        {{ resume_data.get("email") }}
+                    </span>
+                {% endif %}
+
+                {% if resume_data.get("phone") %}
+                    <span>
+                        {{ resume_data.get("phone") }}
+                    </span>
+                {% endif %}
+
+                {% if resume_data.get("location") %}
+                    <span>
+                        {{ resume_data.get("location") }}
+                    </span>
+                {% endif %}
+
+            </div>
+
+
+            <div class="links-line">
+
+                {% if resume_data.get("linkedin") %}
+
+                    <span>
+                        {{ resume_data.get("linkedin") }}
+                    </span>
+
+                {% endif %}
+
+                {% if resume_data.get("github") %}
+
+                    <span>
+                        {{ resume_data.get("github") }}
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        </header>
+
+
+        <!-- SUMMARY -->
+
+        {% if resume_data.get("summary") %}
+
+        <section class="resume-section">
+
+            <h3>
+                PROFESSIONAL SUMMARY
+            </h3>
+
+            <p>
+                {{ resume_data.get("summary") }}
+            </p>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- CAREER OBJECTIVE -->
+
+        {% if resume_data.get("career_objective") %}
+
+        <section class="resume-section">
+
+            <h3>
+                CAREER OBJECTIVE
+            </h3>
+
+            <p>
+                {{ resume_data.get("career_objective") }}
+            </p>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- EDUCATION -->
+
+{% if resume_data.get("education") %}
+
+<section class="resume-section">
+
+    <h3>EDUCATION</h3>
+
+    {% for item in resume_data.get("education", []) %}
+
+    <div class="resume-entry">
+
+        <div class="resume-entry-top">
+
+            <strong>
+                {{ item.get("degree", "") }}
+            </strong>
+
+            <span>
+                {{ item.get("start", "") }}
+
+                {% if item.get("start") and item.get("end") %}
+                    –
+                {% endif %}
+
+                {{ item.get("end", "") }}
+            </span>
+
+        </div>
+
+        {% if item.get("institution") %}
+
+        <div class="resume-entry-subtitle">
+            {{ item.get("institution") }}
+        </div>
+
+        {% endif %}
+
+        {% if item.get("score") %}
+
+        <div class="resume-entry-score">
+            {{ item.get("score") }}
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</section>
+
+{% endif %}
+
+
+        <!-- SKILLS -->
+
+        {% if resume_data.get("skills") %}
+
+        <section class="resume-section">
+
+            <h3>
+                SKILLS
+            </h3>
+
+            <div class="resume-text">
+
+                {{ resume_data.get("skills") }}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- PROJECTS -->
+
+{% if resume_data.get("projects") %}
+
+<section class="resume-section">
+
+    <h3>PROJECTS</h3>
+
+    {% for project in resume_data.get("projects", []) %}
+
+    <div class="resume-entry">
+
+        <div class="resume-entry-top">
+
+            <strong>
+                {{ project.get("name", "") }}
+            </strong>
+
+        </div>
+
+        {% if project.get("technologies") %}
+
+        <div class="resume-entry-subtitle">
+            {{ project.get("technologies") }}
+        </div>
+
+        {% endif %}
+
+        {% if project.get("description") %}
+
+        <div class="resume-entry-description">
+            {{ project.get("description") }}
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</section>
+
+{% endif %}
+
+
+        <!-- INTERNSHIP -->
+
+{% if resume_data.get("internships") %}
+
+<section class="resume-section">
+
+    <h3>
+        INTERNSHIP
+    </h3>
+
+    {% for internship in resume_data.get("internships", []) %}
+
+    <div class="resume-entry">
+
+        <div class="resume-entry-top">
+
+            <strong>
+                {{ internship.get("role", "") }}
+            </strong>
+
+            <span>
+                {{ internship.get("start", "") }}
+
+                {% if internship.get("start") and internship.get("end") %}
+                    –
+                {% endif %}
+
+                {{ internship.get("end", "") }}
+            </span>
+
+        </div>
+
+
+        {% if internship.get("company") %}
+
+        <div class="resume-entry-subtitle">
+
+            {{ internship.get("company") }}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if internship.get("description") %}
+
+        <div class="resume-entry-description">
+
+            {{ internship.get("description") }}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</section>
+
+{% endif %}
+
+
+
+        <!-- WORK EXPERIENCE -->
+
+{% if resume_data.get("experiences") %}
+
+<section class="resume-section">
+
+    <h3>
+        WORK EXPERIENCE
+    </h3>
+
+    {% for experience in resume_data.get("experiences", []) %}
+
+    <div class="resume-entry">
+
+        <div class="resume-entry-top">
+
+            <strong>
+                {{ experience.get("role", "") }}
+            </strong>
+
+            <span>
+
+                {{ experience.get("start", "") }}
+
+                {% if experience.get("start") and experience.get("end") %}
+                    –
+                {% endif %}
+
+                {{ experience.get("end", "") }}
+
+            </span>
+
+        </div>
+
+
+        {% if experience.get("company") %}
+
+        <div class="resume-entry-subtitle">
+
+            {{ experience.get("company") }}
+
+        </div>
+
+        {% endif %}
+
+
+        {% if experience.get("description") %}
+
+        <div class="resume-entry-description">
+
+            {{ experience.get("description") }}
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+    {% endfor %}
+
+</section>
+
+{% endif %}
+
+
+
+        <!-- CERTIFICATIONS -->
+
+        {% if resume_data.get("certifications") %}
+
+        <section class="resume-section">
+
+            <h3>
+                CERTIFICATIONS
+            </h3>
+
+            <div class="resume-text">
+
+                {{ resume_data.get("certifications") }}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- ACHIEVEMENTS -->
+
+        {% if resume_data.get("achievements") %}
+
+        <section class="resume-section">
+
+            <h3>
+                ACHIEVEMENTS
+            </h3>
+
+            <div class="resume-text">
+
+                {{ resume_data.get("achievements") }}
+
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- LANGUAGES -->
+
+        {% if resume_data.get("languages") %}
+
+        <section class="resume-section">
+
+            <h3>
+                LANGUAGES
+            </h3>
+
+            <p>
+                {{ resume_data.get("languages") }}
+            </p>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- INTERESTS -->
+
+        {% if resume_data.get("interests") %}
+
+        <section class="resume-section">
+
+            <h3>
+                INTERESTS
+            </h3>
+
+            <p>
+                {{ resume_data.get("interests") }}
+            </p>
+
+        </section>
+
+        {% endif %}
+
+    </main>
+
+</body>
+
+</html>

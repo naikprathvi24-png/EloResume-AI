@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Edit Profile - EloResume</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+
+        /* =========================================
+           EDIT PROFILE PAGE
+        ========================================= */
+
+        .profile-page {
+            min-height: calc(100vh - 82px);
+
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+
+            padding: 50px 20px;
+
+            box-sizing: border-box;
+
+            background: #f5f7fb;
+        }
+
+        .profile-edit-card {
+            width: 100%;
+            max-width: 520px;
+
+            background: #ffffff;
+
+            padding: 35px;
+
+            border-radius: 16px;
+
+            box-sizing: border-box;
+
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        }
+
+        .profile-edit-header {
+            text-align: center;
+
+            margin-bottom: 30px;
+        }
+
+        .profile-edit-avatar {
+            width: 70px;
+            height: 70px;
+
+            margin: 0 auto 16px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            border-radius: 50%;
+
+            background: #111827;
+            color: #ffffff;
+
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .profile-edit-header h1 {
+            margin: 0 0 8px;
+
+            font-size: 28px;
+            font-weight: 700;
+
+            color: #111827;
+        }
+
+        .profile-edit-header p {
+            margin: 0;
+
+            color: #6b7280;
+
+            font-size: 14px;
+        }
+
+        .profile-form {
+            width: 100%;
+        }
+
+        .profile-form .form-group {
+            margin-bottom: 20px;
+        }
+
+        .profile-form label {
+            display: block;
+
+            margin-bottom: 8px;
+
+            color: #374151;
+
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-form input {
+            width: 100%;
+            height: 46px;
+
+            padding: 0 14px;
+
+            box-sizing: border-box;
+
+            background: #ffffff;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            color: #111827;
+
+            font-size: 15px;
+
+            outline: none;
+        }
+
+        .profile-form input:focus {
+            border-color: #111827;
+
+            box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+        }
+
+        .profile-form-actions {
+            width: 100%;
+
+            display: flex;
+
+            gap: 12px;
+
+            margin-top: 28px;
+        }
+
+        .profile-cancel-button {
+            flex: 1;
+
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            background: #f3f4f6;
+            color: #374151;
+
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            text-decoration: none;
+
+            cursor: pointer;
+        }
+
+        .profile-cancel-button:hover {
+            background: #e5e7eb;
+            color: #111827;
+        }
+
+        .profile-save-button {
+            flex: 1;
+
+            width: auto !important;
+            height: 44px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-sizing: border-box;
+
+            margin: 0 !important;
+
+            padding: 0 18px;
+
+            background: #111827;
+            color: #ffffff;
+
+            border: 1px solid #111827;
+            border-radius: 8px;
+
+            font-family: Arial, sans-serif;
+
+            font-size: 14px;
+            font-weight: 600;
+
+            cursor: pointer;
+        }
+
+        .profile-save-button:hover {
+            background: #1f2937;
+        }
+
+        .profile-edit-card .message {
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 600px) {
+
+            .profile-page {
+                padding: 30px 15px;
+            }
+
+            .profile-edit-card {
+                padding: 25px 20px;
+            }
+
+            .profile-form-actions {
+                flex-direction: column;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <nav class="navbar">
+
+        <div class="logo">
+            EloResume
+        </div>
+
+        <div class="nav-right">
+
+            <span>
+                👋 {{ user_name }}
+            </span>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="logout">
+                Dashboard
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <main class="profile-page">
+
+        <div class="profile-edit-card">
+
+
+            <div class="profile-edit-header">
+
+                <div class="profile-edit-avatar">
+                    {{ user_name[0].upper() }}
+                </div>
+
+                <h1>
+                    Edit Profile
+                </h1>
+
+                <p>
+                    Update your personal information.
+                </p>
+
+            </div>
+
+
+            {% if error %}
+
+                <div class="message error">
+                    {{ error }}
+                </div>
+
+            {% endif %}
+
+
+            <form
+                method="POST"
+                action="{{ url_for('profile') }}"
+                class="profile-form">
+
+
+                <div class="form-group">
+
+                    <label for="name">
+                        Full Name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ user_name }}"
+                        placeholder="Enter your full name"
+                        required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="email">
+                        Email Address
+                    </label>
+
+                    <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value="{{ user_email }}"
+                        placeholder="Enter your email"
+                        required>
+
+                </div>
+
+
+                <div class="profile-form-actions">
+
+                    <a
+                        href="{{ url_for('dashboard') }}"
+                        class="profile-cancel-button">
+
+                        Cancel
+
+                    </a>
+
+
+                    <button
+                        type="submit"
+                        class="profile-save-button">
+
+                        Save Changes
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </main>
+
+
+</body>
+
+</html>

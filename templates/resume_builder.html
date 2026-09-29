@@ -1,0 +1,1637 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Resume Builder - EloResume</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="logo">
+            EloResume
+        </div>
+
+        <a href="{{ url_for('dashboard') }}"
+           class="back-link">
+
+            ← Dashboard
+
+        </a>
+
+    </nav>
+
+
+    <!-- MAIN PAGE -->
+
+    <main class="builder-page">
+
+        <div class="builder-header">
+
+            <h1>
+                Build Your Resume
+            </h1>
+
+            <p>
+                Add your professional information below.
+            </p>
+
+            <div class="builder-badge">
+
+                {{ resume["resume_type"] }}
+                ·
+                {{ resume["style"] }}
+
+            </div>
+
+        </div>
+
+
+        <!-- RESUME FORM -->
+
+        <form
+            method="POST"
+            action="{{ url_for('edit_resume', resume_id=resume['id']) }}">
+
+
+            <!-- =========================================
+                 1. PERSONAL INFORMATION
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        1
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Personal Information
+                        </h2>
+
+                        <p>
+                            Tell employers who you are.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+
+                        <label>
+                            Full Name *
+                        </label>
+
+                        <input
+                            type="text"
+                            name="full_name"
+                            placeholder="Example: Prithvi Naik"
+                            value="{{ resume_data.get('full_name', '') }}"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Professional Title
+                        </label>
+
+                        <input
+                            type="text"
+                            name="professional_title"
+                            placeholder="Example: BCA Student | Python Developer"
+                            value="{{ resume_data.get('professional_title', '') }}">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Email *
+                        </label>
+
+                        <input
+                            type="email"
+                            name="email"
+                            placeholder="example@gmail.com"
+                            value="{{ resume_data.get('email', '') }}"
+                            required>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Phone Number
+                        </label>
+
+                        <input
+                            type="text"
+                            name="phone"
+                            placeholder="+91 XXXXX XXXXX"
+                            value="{{ resume_data.get('phone', '') }}">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            Location
+                        </label>
+
+                        <input
+                            type="text"
+                            name="location"
+                            placeholder="City, State"
+                            value="{{ resume_data.get('location', '') }}">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label>
+                            LinkedIn
+                        </label>
+
+                        <input
+                            type="text"
+                            name="linkedin"
+                            placeholder="linkedin.com/in/yourname"
+                            value="{{ resume_data.get('linkedin', '') }}">
+
+                    </div>
+
+
+                    <div class="form-group full-width">
+
+                        <label>
+                            GitHub
+                        </label>
+
+                        <input
+                            type="text"
+                            name="github"
+                            placeholder="github.com/yourusername"
+                            value="{{ resume_data.get('github', '') }}">
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 2. PROFESSIONAL SUMMARY
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        2
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Professional Summary
+                        </h2>
+
+                        <p>
+                            Give a short introduction about yourself.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <textarea
+                        name="summary"
+                        rows="5"
+                        placeholder="Write a short professional summary...">{{ resume_data.get('summary', '') }}</textarea>
+
+
+                    <button
+                        type="button"
+                        class="ai-generate-button"
+                        onclick="generateSummaryWithAI()">
+
+                        ✨ Generate with AI
+
+                    </button>
+
+
+                    <p
+                        id="ai-summary-status"
+                        class="ai-status">
+                    </p>
+
+
+                    <div class="ai-hint">
+
+                        🤖 Generate a professional summary using AI.
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 3. CAREER OBJECTIVE - FRESHER
+            ========================================== -->
+
+            {% if resume["resume_type"]|lower == "fresher" %}
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        3
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Career Objective
+                        </h2>
+
+                        <p>
+                            Describe your career goal.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <textarea
+                        name="career_objective"
+                        rows="5"
+                        placeholder="Example: Motivated BCA student seeking an entry-level software development opportunity...">{{ resume_data.get('career_objective', '') }}</textarea>
+
+
+                    <button
+                        type="button"
+                        class="ai-generate-button"
+                        onclick="generateCareerObjectiveWithAI()">
+
+                        ✨ Generate with AI
+
+                    </button>
+
+
+                    <p
+                        id="ai-objective-status"
+                        class="ai-status">
+                    </p>
+
+
+                    <div class="ai-hint">
+
+                        🤖 Generate a professional career objective using AI.
+
+                    </div>
+
+                </div>
+
+            </section>
+
+            {% endif %}
+
+
+
+            <!-- =========================================
+                 4. EDUCATION
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        4
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Education
+                        </h2>
+
+                        <p>
+                            Add your educational qualifications.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="education-container">
+
+                    {% if resume_data.get("education") %}
+
+                        {% for item in resume_data.get("education", []) %}
+
+                        <div class="dynamic-entry education-entry">
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Education {{ loop.index }}
+                                </h3>
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Degree / Qualification
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_degree[]"
+                                        value="{{ item.get('degree', '') }}"
+                                        placeholder="Example: BCA">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Institution
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_institution[]"
+                                        value="{{ item.get('institution', '') }}"
+                                        placeholder="Example: ABC College">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Start Year
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_start[]"
+                                        value="{{ item.get('start', '') }}"
+                                        placeholder="Example: 2024">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        End Year
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_end[]"
+                                        value="{{ item.get('end', '') }}"
+                                        placeholder="Example: 2027">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Percentage / CGPA
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_score[]"
+                                        value="{{ item.get('score', '') }}"
+                                        placeholder="Example: 85% or 8.5 CGPA">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                        {% endfor %}
+
+                    {% else %}
+
+                        <div class="dynamic-entry education-entry">
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Education 1
+                                </h3>
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Degree / Qualification
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_degree[]"
+                                        placeholder="Example: BCA">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Institution
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_institution[]"
+                                        placeholder="Example: ABC College">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Start Year
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_start[]"
+                                        placeholder="Example: 2024">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        End Year
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_end[]"
+                                        placeholder="Example: 2027">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Percentage / CGPA
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="education_score[]"
+                                        placeholder="Example: 85% or 8.5 CGPA">
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    {% endif %}
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="add-entry-button"
+                    onclick="addEducation()">
+
+                    + Add Education
+
+                </button>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 5. SKILLS
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        5
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Skills
+                        </h2>
+
+                        <p>
+                            Add your technical and professional skills.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+ <div class="form-group full-width">
+
+    <label>
+        Skills
+    </label>
+
+                    <textarea
+        name="skills"
+        rows="5"
+        placeholder="Example: Python, Java, HTML, CSS, JavaScript"></textarea>
+
+    <button
+        type="button"
+        class="ai-generate-button"
+        onclick="suggestSkillsWithAI()">
+
+        ✨ Suggest Skills with AI
+
+    </button>
+
+    <p
+        id="ai-skills-status"
+        class="ai-status">
+    </p>
+
+</div>
+            </section>
+
+
+
+            <!-- =========================================
+                 6. PROJECTS
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        6
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Projects
+                        </h2>
+
+                        <p>
+                            Showcase your important projects.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="projects-container">
+
+
+                    {% if resume_data.get("projects") %}
+
+
+                        {% for project in resume_data.get("projects", []) %}
+
+
+                        <div class="dynamic-entry project-entry">
+
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Project {{ loop.index }}
+                                </h3>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Project Name
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="project_name[]"
+                                        value="{{ project.get('name', '') }}"
+                                        placeholder="Example: AI Notes Summarizer">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Technologies
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="project_technologies[]"
+                                        value="{{ project.get('technologies', '') }}"
+                                        placeholder="Example: Python, Flask, SQLite">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Project Description
+                                    </label>
+
+
+                                    <textarea
+                                        name="project_description[]"
+                                        rows="5"
+                                        placeholder="Describe what you built, what problem it solves, and your contribution.">{{ project.get('description', '') }}</textarea>
+
+
+                                    <button
+                                        type="button"
+                                        class="ai-generate-button"
+                                        onclick="generateProjectDescriptionWithAI(this)">
+
+                                        ✨ Generate with AI
+
+                                    </button>
+
+
+                                    <p class="ai-status project-ai-status">
+                                    </p>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <!-- DEFAULT PROJECT 1 -->
+
+                        <div class="dynamic-entry project-entry">
+
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Project 1
+                                </h3>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Project Name
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="project_name[]"
+                                        placeholder="Example: AI Notes Summarizer">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Technologies
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="project_technologies[]"
+                                        placeholder="Example: Python, Flask, SQLite">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Project Description
+                                    </label>
+
+
+                                    <textarea
+                                        name="project_description[]"
+                                        rows="5"
+                                        placeholder="Describe what you built, what problem it solves, and your contribution."></textarea>
+
+
+                                    <button
+                                        type="button"
+                                        class="ai-generate-button"
+                                        onclick="generateProjectDescriptionWithAI(this)">
+
+                                        ✨ Generate with AI
+
+                                    </button>
+
+
+                                    <p class="ai-status project-ai-status">
+                                    </p>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="add-entry-button"
+                    onclick="addProject()">
+
+                    + Add Project
+
+                </button>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 7. INTERNSHIP - FRESHER
+            ========================================== -->
+
+            {% if resume["resume_type"]|lower == "fresher" %}
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        7
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Internship
+                        </h2>
+
+                        <p>
+                            Add your internship experience.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="internship-container">
+
+
+                    {% if resume_data.get("internships") %}
+
+
+                        {% for internship in resume_data.get("internships", []) %}
+
+
+                        <div class="dynamic-entry internship-entry">
+
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Internship {{ loop.index }}
+                                </h3>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Company / Organization
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_company[]"
+                                        value="{{ internship.get('company', '') }}"
+                                        placeholder="Example: ABC Technologies">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Role / Position
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_role[]"
+                                        value="{{ internship.get('role', '') }}"
+                                        placeholder="Example: Python Intern">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Start Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_start[]"
+                                        value="{{ internship.get('start', '') }}"
+                                        placeholder="Example: June 2026">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        End Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_end[]"
+                                        value="{{ internship.get('end', '') }}"
+                                        placeholder="Example: August 2026">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Description
+                                    </label>
+
+                                    <textarea
+                                        name="internship_description[]"
+                                        rows="5"
+                                        placeholder="Describe your responsibilities, work, and achievements.">{{ internship.get('description', '') }}</textarea>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <div class="dynamic-entry internship-entry">
+
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Internship 1
+                                </h3>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Company / Organization
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_company[]"
+                                        placeholder="Example: ABC Technologies">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Role / Position
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_role[]"
+                                        placeholder="Example: Python Intern">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Start Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_start[]"
+                                        placeholder="Example: June 2026">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        End Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="internship_end[]"
+                                        placeholder="Example: August 2026">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Description
+                                    </label>
+
+                                    <textarea
+                                        name="internship_description[]"
+                                        rows="5"
+                                        placeholder="Describe your responsibilities, work, and achievements."></textarea>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="add-entry-button"
+                    onclick="addInternship()">
+
+                    + Add Internship
+
+                </button>
+
+            </section>
+
+            {% endif %}
+
+
+
+            <!-- =========================================
+                 7. WORK EXPERIENCE - EXPERIENCED
+            ========================================== -->
+
+            {% if resume["resume_type"]|lower == "experienced" %}
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        7
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Work Experience
+                        </h2>
+
+                        <p>
+                            Add your professional experience.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="experience-container">
+
+
+                    {% if resume_data.get("experiences") %}
+
+
+                        {% for experience in resume_data.get("experiences", []) %}
+
+
+                        <div class="dynamic-entry experience-entry">
+
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Experience {{ loop.index }}
+                                </h3>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Company
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_company[]"
+                                        value="{{ experience.get('company', '') }}"
+                                        placeholder="Example: ABC Technologies">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Job Title / Role
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_role[]"
+                                        value="{{ experience.get('role', '') }}"
+                                        placeholder="Example: Software Developer">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Start Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_start[]"
+                                        value="{{ experience.get('start', '') }}"
+                                        placeholder="Example: January 2025">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        End Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_end[]"
+                                        value="{{ experience.get('end', '') }}"
+                                        placeholder="Example: Present">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Description
+                                    </label>
+
+                                    <textarea
+                                        name="experience_description[]"
+                                        rows="5"
+                                        placeholder="Describe your responsibilities, achievements, and contributions.">{{ experience.get('description', '') }}</textarea>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        {% endfor %}
+
+
+                    {% else %}
+
+
+                        <div class="dynamic-entry experience-entry">
+
+
+                            <div class="dynamic-entry-header">
+
+                                <h3>
+                                    Experience 1
+                                </h3>
+
+
+                                <button
+                                    type="button"
+                                    class="remove-entry"
+                                    onclick="removeEntry(this)">
+
+                                    Remove
+
+                                </button>
+
+                            </div>
+
+
+                            <div class="form-grid">
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Company
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_company[]"
+                                        placeholder="Example: ABC Technologies">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Job Title / Role
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_role[]"
+                                        placeholder="Example: Software Developer">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        Start Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_start[]"
+                                        placeholder="Example: January 2025">
+
+                                </div>
+
+
+                                <div class="form-group">
+
+                                    <label>
+                                        End Date
+                                    </label>
+
+                                    <input
+                                        type="text"
+                                        name="experience_end[]"
+                                        placeholder="Example: Present">
+
+                                </div>
+
+
+                                <div class="form-group full-width">
+
+                                    <label>
+                                        Description
+                                    </label>
+
+                                    <textarea
+                                        name="experience_description[]"
+                                        rows="5"
+                                        placeholder="Describe your responsibilities, achievements, and contributions."></textarea>
+
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                    {% endif %}
+
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="add-entry-button"
+                    onclick="addExperience()">
+
+                    + Add Experience
+
+                </button>
+
+            </section>
+
+            {% endif %}
+
+
+
+            <!-- =========================================
+                 8. CERTIFICATIONS
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        8
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Certifications
+                        </h2>
+
+                        <p>
+                            Add relevant certifications.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <textarea
+                        name="certifications"
+                        rows="5"
+                        placeholder="Example:
+
+Python Programming – Coursera
+Web Development – Udemy
+Data Analytics – Google">{{ resume_data.get('certifications', '') }}</textarea>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 9. ACHIEVEMENTS
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        9
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Achievements
+                        </h2>
+
+                        <p>
+                            Add awards, competitions or accomplishments.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <textarea
+                        name="achievements"
+                        rows="5"
+                        placeholder="Example:
+
+• Participated in college hackathon.
+• Won first prize in coding competition.
+• Completed major academic project.">{{ resume_data.get('achievements', '') }}</textarea>
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 10. LANGUAGES
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        10
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Languages
+                        </h2>
+
+                        <p>
+                            Add languages you know.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <input
+                        type="text"
+                        name="languages"
+                        placeholder="Example: English, Kannada, Hindi"
+                        value="{{ resume_data.get('languages', '') }}">
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 11. INTERESTS
+            ========================================== -->
+
+            <section class="builder-card">
+
+                <div class="builder-section-title">
+
+                    <span class="section-number">
+                        11
+                    </span>
+
+                    <div>
+
+                        <h2>
+                            Interests
+                        </h2>
+
+                        <p>
+                            Add your professional or personal interests.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <input
+                        type="text"
+                        name="interests"
+                        placeholder="Example: Technology, Reading, Photography"
+                        value="{{ resume_data.get('interests', '') }}">
+
+                </div>
+
+            </section>
+
+
+
+            <!-- =========================================
+                 SAVE / CANCEL
+            ========================================== -->
+
+            <div class="builder-actions">
+
+
+                <a
+                    href="{{ url_for('dashboard') }}"
+                    class="cancel-button">
+
+                    Cancel
+
+                </a>
+
+
+                <button
+                    type="submit"
+                    class="save-resume-button">
+
+                    Save Resume
+
+                </button>
+
+
+            </div>
+
+
+        </form>
+
+    </main>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+    
+
+
+</body>
+
+</html>
